@@ -1,0 +1,60 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "title": "Ocean Breeze",
+      "subtitle": "Refreshing coastal inspiration",
+      "colourName": "#40E0D0",
+      "videoUrl": "https://res.cloudinary.com/dqnycu23v/video/upload/v1761549154/videos/one1_wqiffn.mp4"
+    },
+    {
+      "id": 2,
+      "title": "Sunset Glow",
+      "subtitle": "Warm evening ambiance",
+      "colourName": "#FF7F50",
+      "videoUrl": "https://res.cloudinary.com/dqnycu23v/video/upload/v1761549375/videos/two2_wzwuah.mp4"
+    },
+    {
+      "id": 3,
+      "title": "Forest Path",
+      "subtitle": "Natural woodland theme",
+      "colourName": "#228B22",
+      "videoUrl": "https://res.cloudinary.com/dqnycu23v/video/upload/v1761549399/videos/three3_lmygok.mp4"
+    },
+    {
+      "id": 4,
+      "title": "Lavender Dreams",
+      "subtitle": "Calming floral essence",
+      "colourName": "#E6E6FA",
+      "videoUrl": "https://res.cloudinary.com/dqnycu23v/video/upload/v1761549154/videos/one1_wqiffn.mp4"
+    },
+    {
+      "id": 5,
+      "title": "Golden Hour",
+      "subtitle": "Warm sunlight moments",
+      "colourName": "#FFBF00",
+      "videoUrl": "https://res.cloudinary.com/dqnycu23v/video/upload/v1761549399/videos/three3_lmygok.mp4"
+    },
+    {
+      "id": 6,
+      "title": "Midnight Sky",
+      "subtitle": "Deep cosmic mystery",
+      "colourName": "#000080",
+      "videoUrl": "https://res.cloudinary.com/dqnycu23v/video/upload/v1761549375/videos/two2_wzwuah.mp4"
+    },
+    {
+      "id": 7,
+      "title": "Rose Garden",
+      "subtitle": "Romantic floral beauty",
+      "colourName": "#FF66CC",
+      "videoUrl": "https://res.cloudinary.com/dqnycu23v/video/upload/v1761549154/videos/one1_wqiffn.mp4"
+    },
+    {
+      "id": 8,
+      "title": "Stone Gray",
+      "subtitle": "Modern minimalist style",
+      "colourName": "#36454F",
+      "videoUrl": "https://res.cloudinary.com/dqnycu23v/video/upload/v1761549399/videos/three3_lmygok.mp4"
+    }
+  ]
+}

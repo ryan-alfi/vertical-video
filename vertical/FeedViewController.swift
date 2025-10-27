@@ -13,17 +13,12 @@ class FeedViewController: UIViewController {
     enum Section {
         case main
     }
-    // Define the item struct
-    struct Item: Hashable {
-        let id: Int
-        let title: String
-    }
     
     // Create the collection view
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(FeedCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(TiktokStyleViewCell.self, forCellWithReuseIdentifier: TiktokStyleViewCell.reuseIdentifier)
         collectionView.backgroundColor = .white
         return collectionView
     }()
@@ -43,12 +38,11 @@ class FeedViewController: UIViewController {
     
     
     // Create the diffable data source
-    private lazy var dataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView) { collectionView, indexPath, item -> FeedCollectionViewCell? in
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? FeedCollectionViewCell else {
+    private lazy var dataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView) { collectionView, indexPath, item -> TiktokStyleViewCell? in
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TiktokStyleViewCell.reuseIdentifier, for: indexPath) as? TiktokStyleViewCell else {
             return nil
         }
-        let color: UIColor = indexPath.row % 2 == 0 ? .yellow : .blue
-        cell.backgroundColor = color
+        cell.configure(with: item)
         
         return cell
     }
@@ -68,32 +62,68 @@ class FeedViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         // Load the initial data
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems([Item(id: 1, title: "Item 1"), Item(id: 2, title: "Item 2"), Item(id: 3, title: "Item 3")])
-        dataSource.apply(snapshot, animatingDifferences: false)
+        if let url = Bundle.main.url(forResource: "dummy", withExtension: "json"),
+           let data = try? Data(contentsOf: url),
+           let decoded = try? JSONDecoder().decode(ItemList.self, from: data) {
+            var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+            snapshot.appendSections([.main])
+            snapshot.appendItems(decoded.items)
+            dataSource.apply(snapshot, animatingDifferences: false)
+        }
     }
 
 }
 
 extension FeedViewController: UICollectionViewDelegate, UIScrollViewDelegate {
-    // TODO: have to check attribute frame
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let cell = cell as? TiktokStyleViewCell else { return }
+        cell.play()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let cell = cell as? TiktokStyleViewCell else { return }
+        cell.pause()
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // Calculate the percentage of visible cells
-        guard let collectionView = scrollView as? UICollectionView else {
+        // 1
+        let cells = collectionView.visibleCells
+        // cell are empty no need to do anything
+        // 2
+        guard cells.isEmpty == false else {
             return
         }
-        
-        for cell in collectionView.visibleCells.compactMap({$0 as? FeedCollectionViewCell}) {
-            let f = cell.frame
-            let w = self.view.window!
-            let rect = w.convert(f, from: cell.superview!)
-            let inter = rect.intersection(w.bounds)
-            let ratio = (inter.width * inter.height) / (f.width * f.height)
-            let rep = (String(Int(ratio * 100)) + "%")
-            
-            cell.topLabel.text = rep
-            cell.bottomLabel.text = rep
+        // 3
+        guard let window = self.view.window else {
+            return
+        }
+        // 4
+        for cell in cells {
+            // 5
+            guard let tikTokcell = cell as? TiktokStyleViewCell else {
+                continue
+            }
+            guard let superView = cell.superview else {
+                continue
+            }
+            // 6
+            let cellFrame = tikTokcell.frame
+            let rect = window.convert(cellFrame, from: superView)
+            // 7
+            let inter = rect.intersection(window.bounds)
+            // 8
+            let ratio = (inter.width * inter.height) / (cellFrame.width * cellFrame.height) * 100
+            // 9
+            let rep = (String(Int(ratio)) + "%")
+            //tikTokcell.titleLabel.text = rep
+            tikTokcell.subtitleLabel.text = rep
+            // 10
+            if ratio > 80 {
+                tikTokcell.play()
+            } else {
+                tikTokcell.pause()
+            }
         }
     }
 }
